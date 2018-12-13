@@ -1,0 +1,125 @@
+VF
+
+Album feito por meio das imagens incluidas nos 'Recursos estáticos'
+Utilizado CSS e HTML puro
+
+<apex:page showHeader="false">
+    <style>
+        h1 {font-family:arial; font-size:40px;}
+        .descricao {text-align:center;}
+        .colunas {border:solid;}
+        .desc {border:dotted; border-width:0.7px;} 
+    </style>
+    <div>
+        <h1><center>
+            Albúm de Figurinhas
+            </center>
+        </h1>
+    </div>
+    <hr/>
+    <table>
+        <tr>
+            <td class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/1.jpg')}" width="390" height="150" /> 
+            </td>
+            <td  class="colunas"> 
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/2.jpg')}" width="390" height="150"/> 
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/3.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/4.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/5.jpg')}" width="390" height="150"/>
+            </td>
+        </tr>        
+        <tr class="descricao">
+            <td class="desc">
+                Ao som de Nando Reis
+            </td>
+            <td  class="desc">
+            Pensando...
+            </td>
+            <td class="desc">
+            Spider!!!
+            </td>
+            <td class="desc">
+            Raios de luz
+            </td>
+            <td class="desc">
+            Cuspindo fogo
+            </td>
+        </tr>
+        <tr>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/6.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/7.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/8.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas"	>
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/9.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/14.jpg')}" width="390" height="150"/>
+            </td>
+        </tr>
+         <tr class="descricao">
+            <td class="desc">
+            Buraco negro
+            </td>
+            <td class="desc">
+            Guitarra azul
+            </td>
+            <td class="desc">
+            Carro
+            </td>
+            <td class="desc">
+            Pombo
+            </td>
+            <td class="desc">
+            Programando
+            </td>
+        </tr> 
+        <tr>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/15.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/10.jpeg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/11.jpg')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/12.png')}" width="390" height="150"/>
+            </td>
+            <td  class="colunas">
+                <apex:image url="{!URLFOR($Resource.Figurinha,'Imagem/13.png')}" width="390" height="150"/>
+            </td>
+        </tr>
+        <tr class="descricao">
+            <td class="desc">
+            Pavão?
+            </td>
+            <td class="desc">
+            Adidas
+            </td>
+            <td class="desc">
+            São Paulo perdendo a liderança
+            </td>
+            <td class="desc">
+            O que comer?
+            </td>
+            <td class="desc">
+            Rex
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</apex:page>
