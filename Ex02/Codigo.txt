@@ -1,0 +1,108 @@
+VF
+
+<apex:page standardController="Case" extensions="ExListaController">
+    
+    <apex:form >
+        <apex:pageBlock title="Caso">
+            <apex:pageBlockSection >
+                
+              
+                    <apex:outputField value="{! Case.CaseNumber }"/>
+                    <apex:outputField value="{! Case.Status }"/>
+                    <apex:outputField value="{! Case.AccountId }"/>
+                  <div id="render">
+                    <apex:outputField value="{! Case.Protocolo__C }" id="prot" />
+                    <apex:outputField value="{! Case.Data_e_hora_protocolo__c }"/>
+                </div>
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <!-- botao só aparece se o protocolo for igual a nulo -->
+                    <apex:commandButton action="{!geraProtocolo}" value="Gerar Protocolo" id="btnGera" reRender="render" rendered="{!Case.Protocolo__c == null}">
+                    </apex:commandButton>         
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>
+
+Controller
+
+public class ExListaController{
+    
+    public ApexPages.StandardController stdController {get; set;}
+    public string caseIdPagina {get;set;}
+
+    public ExListaController(ApexPages.StandardController controller) {
+        stdController = controller;
+        Case temporaria = (Case)controller.getRecord();
+        caseIdPagina = temporaria.id;
+        System.debug(caseIdPagina);   
+    }
+    
+    public void geraProtocolo(){
+        
+        if(caseIdPagina !=null) {
+            List<Case> c = [SELECT AccountId, Status, Protocolo__C, Data_e_Hora_Protocolo__C FROM Case WHERE Id = :caseIdPagina];
+            System.debug(c);
+            
+            //pegando informações da lista
+            Case listaC;
+            for(Integer i=0; i < c.size(); i++)  listaC= c.get(i);
+            System.debug(listaC);
+            
+            //verificar se o campo AccountId está vazio, verificar 'Protocolo__C' está vazio, verificar se o Status é igual a 'Working'
+            if(!String.isEmpty(listaC.AccountId)) {
+                if(String.isEmpty(listaC.Protocolo__c)){
+                    if(listaC.Status == 'Working') {
+                        
+                        String nome, prot;
+                        List <Account> cc = new List<Account>();
+                        
+                        //lista para pegar o sobrenome do contato pelo id do contato (ContactId)
+                        if(cc.isEmpty()) cc = [SELECT Name FROM Account WHERE Id = :listaC.AccountId];
+                        System.debug(cc);
+                        
+                        for(Integer i=0; i < cc.size(); i++) {
+                            
+                            //obter conteudo da lista jogando na variavel conta
+                            Account conta = cc.get(i);
+                            System.debug(conta);
+                            
+                            //obter nome que está na variavel conta
+                            nome = conta.Name;
+                            System.debug(nome);
+                            
+                            //Quebrar String e pegar somente os 3 digitos iniciais
+                            prot = nome.substring(0, 3);
+                            System.debug(prot);
+                        }
+                        
+                        //gerar numeros aleatorios de 5 digitos e converter para Integer
+                        Integer random = integer.valueof((Math.random()+1)*10000);
+                        System.debug(random);
+                        
+                        
+                        //incluir protocolo no caso
+                        listaC.Protocolo__c = prot + random;
+                        //gerando data e hora do momento
+                        datetime myDateTime = datetime.now();
+                        //incluir data e hora do protocolo
+                        listaC.Data_e_hora_protocolo__C = myDatetime;   
+                    }
+                }
+                
+                //se o status não for 'Working' ele apaga o numero de protocolo__C e a data/hora gerada
+                else {
+                    if(listaC.Status != 'Working'){
+                        listaC.Protocolo__c = '';
+                        listaC.Data_e_Hora_Protocolo__C = null;
+                    } 
+                }
+            }
+            //atualizar caso
+            update listaC;
+            System.debug(listaC);
+        }
+    }
+}

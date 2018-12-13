@@ -1,0 +1,124 @@
+Application
+
+<aura:application >
+	
+    
+    <c:Ex03c/>
+</aura:application>
+
+Component
+
+<aura:component  controller="Ex03Controller" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.getCase}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.getProtocolo}"/> 
+    
+    <aura:attribute type="Case[]" name="lstCase"/>
+    <aura:attribute type="List" name="lstProtocolo"/>    
+    <br/>
+    <div class="container">
+        <aura:iteration var="c" items="{!v.lstCase}">
+            <div class="row">
+                <b>&nbsp; Numero do caso:</b> &nbsp; {!c.CaseNumber}
+            </div>
+            <hr/>
+            
+            <div class="row">
+                <b>&nbsp; Status: </b>&nbsp; {!c.Status}
+            </div>
+            <hr/>
+        </aura:iteration>
+          
+        <h1><b> &nbsp; Protocolos </b></h1><br></br>
+        <aura:iteration items="{!v.lstProtocolo}" var="p">
+            <div class="row">
+                <b>&nbsp; Numero do caso:</b> &nbsp; {!p.Name} &nbsp;   <b>Data/Hora gerado: </b> {!p.Data_e_Hora_gerado__c} 
+            </div>
+            <hr/>
+            
+        </aura:iteration> 
+       &nbsp;  *O ultimo protocolo gerado é o que está ativo.
+    </div>
+    
+</aura:component>
+
+Controller.js
+
+({
+    getCase : function(component, event, helper) {
+        // alert ("Hello World"); 
+        
+        helper.getCase(component);
+    
+    },
+
+        getProtocolo : function(component, event, helper) {
+        // alert ("Hello World"); 
+        
+        helper.getProtocolo(component);
+    
+    }
+})
+
+Helper
+
+({
+    getCase : function(component) {
+        
+        var action = component.get("c.pegCase");
+        
+        action.setCallback(this, function(response){
+            
+            var state = response.getState();
+            if(state === "SUCCESS"){
+                component.set("v.lstCase", response.getReturnValue());
+            }
+            
+        });
+        $A.enqueueAction(action);
+                
+    },
+       getProtocolo : function(component) {
+        
+        var action = component.get("c.pegProtocolo");
+        
+        action.setCallback(this, function(response){
+            
+            var state = response.getState();
+            if(state === "SUCCESS"){
+                component.set("v.lstProtocolo", response.getReturnValue());
+            }
+            
+        });
+        $A.enqueueAction(action);
+                
+    },
+    
+})
+
+Controller (apex)
+
+public class Ex03Controller {
+
+    @auraEnabled
+    public static Case pegCase(){
+        //pegar numero de caso e status do caso teste
+        Case c = [SELECT CaseNumber, Status FROM Case WHERE Id = '5001U0000017bMNQAY'];
+        System.debug(c);  
+        
+        return c;    
+    }
+    
+    @auraEnabled
+    public static list<Protocolo__c> pegProtocolo(){
+        
+        list<Protocolo__C> lstProt = new List<Protocolo__c>();
+        //lista com todos os protocolos do caso teste
+        lstProt= [SELECT Name, Data_e_Hora_gerado__c FROM Protocolo__c WHERE CasoProt__c = '5001U0000017bMNQAY' ORDER BY Data_e_Hora_gerado__c ASC];
+        
+        System.debug(lstProt);
+        return lstProt;
+      
+    }
+    
+}
