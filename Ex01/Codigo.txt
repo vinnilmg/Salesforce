@@ -1,0 +1,46 @@
+trigger GeraProtocolo on Case (before insert, before update) {
+    
+    for(Case c :Trigger.New){
+        System.debug(c);
+        
+        //verificar se o campo AccountId está vazio, verificar 'Protocolo__C' está vazio, verificar se o Status é igual a 'Working'
+        if(!String.isEmpty(c.AccountId)) {
+            if(String.isEmpty(c.Protocolo__c)){
+                if(c.Status == 'Working') {
+                    
+                    String nome, prot;
+                    List <Account> cc = new List<Account>(); 
+                    
+                    //lista para pegar o nome da conta pelo id da conta (AccountId)
+                    if(cc.isEmpty()) cc = [SELECT Name FROM Account WHERE Id = :c.AccountId];
+                    System.debug(cc);
+                    
+                    for(Integer i=0; i < cc.size(); i++) {
+                        
+                        //obter conteudo da lista jogando na variavel conta
+                        Account conta = cc.get(i);
+                        System.debug(conta);
+                        
+                        //obter nome que está na variavel conta
+                        nome = conta.Name;
+                        System.debug(nome);
+                        
+                        //Quebrar String e pegar somente os 3 digitos iniciais
+                        prot = nome.substring(0, 3);
+                        System.debug(prot);
+                    }
+                    //gerar numeros aleatorios de 5 digitos e converter para Integer
+                    Integer random = integer.valueof((Math.random()+1)*10000);
+                    System.debug(random);
+                    
+                    //incluir protocolo no Caso
+                    c.Protocolo__c = prot + random;
+                }
+            }
+            //se o status não for 'Working' ele apaga o numero de protocolo__C
+            else {
+                if(c.Status != 'Working') c.Protocolo__c = '';               
+            } 
+        }
+    }       
+}
