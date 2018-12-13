@@ -1,0 +1,20 @@
+public class MapaMeses {
+
+    public static Map<Integer, String> Meses(){
+        //guardando valores em uma lista (vetor)
+        String[] lstMeses = new String[]{'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro','Outubro','Novembro', 'Dezembro'};
+            
+            Map<Integer, String> mapaMeses= New Map <Integer, String>();
+        
+        //inserindo valores ao mapa
+        for(Integer i=0; i < lstMeses.size();i++) {
+            mapaMeses.put(i+1, lstMeses.get(i));
+        }
+        //visualizar todos os valores do mapa, começando do indice 1
+        for(Integer m=1; m <= lstMeses.size();m++) {
+            String iMap = mapaMeses.get(m);
+            System.debug('Índice: ' + m + ' Mês: ' + iMap);
+        }
+        return mapaMeses;
+    }
+}
